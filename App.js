@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {StyleSheet, View, Text, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
+//fontAwesome
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faMapMarkerAlt,
