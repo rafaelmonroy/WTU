@@ -23,6 +23,14 @@ end
 
 target 'WTU' do
   # Pods for WTU
+  # Add the Firebase pod for Google Analytics
+  pod 'Firebase/Analytics'
+
+  # Add the pods for any other Firebase products you want to use in your app
+  pod 'Firebase/Auth'
+  pod 'Firebase/Firestore'
+  pod 'Firebase/Database'
+  # All other pods
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
