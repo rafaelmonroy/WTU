@@ -12,11 +12,14 @@ export default class List extends Component {
 
   componentDidMount() {
     firestore()
-      .collection('bars')
-      .onSnapshot(querySnapshot => {
-        console.log('success');
+      .collection('Tests')
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((documentSnapshot) => {
+          data = documentSnapshot.data();
+          console.log('yes', data);
+        });
       });
-    console.log('test');
   }
 
   render() {
