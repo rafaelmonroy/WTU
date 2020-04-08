@@ -11,13 +11,16 @@ export default class List extends Component {
   }
 
   componentDidMount() {
+    let data;
     firestore()
       .collection('Tests')
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((documentSnapshot) => {
           data = documentSnapshot.data();
-          console.log('yes', data);
+        });
+        this.setState({
+          text: data.rafael,
         });
       });
   }
