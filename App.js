@@ -1,97 +1,45 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, Text, StatusBar} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, Platform, Image, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import auth from '@react-native-firebase/auth';
+// import the different screens
+import SignUp from './components/auth/SignUp';
+import Login from './components/auth/Login';
+import Home from './components/Home';
+// create our app's navigation stack
+const Stack = createStackNavigator();
 
-//fontAwesome
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faMapMarkerAlt,
-  faListOl,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+function App() {
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
 
-//components
-import MainStatusBar from './components/MainStatusBar';
-import Header from './components/Header';
-import Map from './components/Map';
-import BottomBar from './components/BottomBar';
-import Info from './components/Info';
-import List from './components/List';
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
 
-const Tab = createBottomTabNavigator();
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
-export default class App extends Component {
-  render() {
+  if (initializing) return null;
+
+  if (!user) {
     return (
       <NavigationContainer>
-        <View style={styles.constainer}>
-          <MainStatusBar />
-          <Header />
-          <Tab.Navigator
-            screenOptions={({route}) => ({
-              tabBarIcon: ({focused}) => {
-                if (route.name === 'Map') {
-                  return (
-                    <FontAwesomeIcon
-                      icon={faMapMarkerAlt}
-                      size={25}
-                      style={focused ? styles.selectedIcon : styles.icon}
-                    />
-                  );
-                } else if (route.name === 'Info') {
-                  return (
-                    <FontAwesomeIcon
-                      icon={faInfoCircle}
-                      size={25}
-                      style={focused ? styles.selectedIcon : styles.icon}
-                    />
-                  );
-                } else if (route.name === 'List') {
-                  return (
-                    <FontAwesomeIcon
-                      icon={faListOl}
-                      size={25}
-                      style={focused ? styles.selectedIcon : styles.icon}
-                    />
-                  );
-                }
-              },
-            })}
-            tabBarOptions={{
-              activeTintColor: 'red',
-              inactiveTintColor: 'red',
-              activeBackgroundColor: 'black',
-              inactiveBackgroundColor: 'black',
-              showLabel: false,
-              style: {
-                borderTopWidth: 4,
-                borderTopColor: '#00e1ff',
-              },
-            }}>
-            <Tab.Screen name="Map" component={Map} />
-            <Tab.Screen name="List" component={List} />
-
-            <Tab.Screen name="Info" component={Info} />
-          </Tab.Navigator>
-          <BottomBar />
-        </View>
+        <Stack.Navigator>
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Login" component={Login} />
+        </Stack.Navigator>
       </NavigationContainer>
     );
   }
+
+  return <Home />;
 }
 
-const styles = StyleSheet.create({
-  constainer: {
-    position: 'relative',
-    height: '100%',
-  },
-  icon: {
-    color: '#00e1ff',
-    marginTop: 2,
-  },
-  selectedIcon: {
-    color: '#fff',
-    marginTop: 2,
-  },
-});
+export default App;

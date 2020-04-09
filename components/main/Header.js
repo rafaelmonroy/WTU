@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, Button} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faGlassMartiniAlt, faBeer} from '@fortawesome/free-solid-svg-icons';
+import auth from '@react-native-firebase/auth';
 
 export default class Header extends Component {
+  signOut = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
+  };
   render() {
     return (
       <View style={styles.header}>
@@ -16,6 +22,7 @@ export default class Header extends Component {
           size={21}
           style={styles.icon}
         />
+        <Button title="Sign Out" onPress={this.signOut} />
       </View>
     );
   }
