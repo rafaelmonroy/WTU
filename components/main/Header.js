@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faGlassMartiniAlt, faBeer} from '@fortawesome/free-solid-svg-icons';
 import auth from '@react-native-firebase/auth';
@@ -13,16 +13,19 @@ export default class Header extends Component {
   render() {
     return (
       <View style={styles.header}>
-        <FontAwesomeIcon icon={faBeer} size={25} style={styles.icon} />
-        <Text>{'  '}</Text>
-        <Text style={styles.text}>WTU</Text>
-        <Text>{'  '}</Text>
-        <FontAwesomeIcon
-          icon={faGlassMartiniAlt}
-          size={21}
-          style={styles.icon}
-        />
-        <Button title="Sign Out" onPress={this.signOut} />
+        <View style={styles.empty} />
+        <Text style={styles.text}>
+          <FontAwesomeIcon icon={faBeer} size={25} style={styles.icon} /> WTU{' '}
+          <FontAwesomeIcon
+            icon={faGlassMartiniAlt}
+            size={21}
+            style={styles.icon}
+          />
+        </Text>
+
+        <TouchableOpacity onPress={this.signOut} style={styles.button}>
+          <Text>Sign Out</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -33,12 +36,15 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: 'row',
     backgroundColor: '#000',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     borderBottomWidth: 4,
     borderBottomColor: '#00e1ff',
   },
   text: {
+    flex: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
     color: '#fff',
     fontSize: 25,
     fontWeight: 'bold',
@@ -47,5 +53,20 @@ const styles = StyleSheet.create({
   icon: {
     color: '#00e1ff',
     marginTop: 2,
+  },
+  button: {
+    flex: 1,
+    height: 20,
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#00e1ff',
+    marginTop: 3,
+    marginRight: 5,
+    paddingLeft: 3,
+    paddingRight: 3,
+  },
+  empty: {
+    flex: 2.3,
   },
 });
