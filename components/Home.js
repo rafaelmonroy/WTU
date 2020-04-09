@@ -16,7 +16,6 @@ import MainStatusBar from './main/MainStatusBar';
 import Header from './main/Header';
 import Map from './main/Map';
 import BottomBar from './main/BottomBar';
-import Info from './main/Info';
 import List from './main/List';
 
 const Tab = createBottomTabNavigator();
@@ -35,14 +34,6 @@ export default class Home extends Component {
                   return (
                     <FontAwesomeIcon
                       icon={faMapMarkerAlt}
-                      size={25}
-                      style={focused ? styles.selectedIcon : styles.icon}
-                    />
-                  );
-                } else if (route.name === 'Info') {
-                  return (
-                    <FontAwesomeIcon
-                      icon={faInfoCircle}
                       size={25}
                       style={focused ? styles.selectedIcon : styles.icon}
                     />
@@ -71,8 +62,6 @@ export default class Home extends Component {
             }}>
             <Tab.Screen name="Map" component={Map} />
             <Tab.Screen name="List" component={List} />
-
-            <Tab.Screen name="Info" component={Info} />
           </Tab.Navigator>
           <BottomBar />
         </View>
@@ -87,11 +76,11 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   icon: {
-    color: '#00e1ff',
+    color: '#fff',
     marginTop: 2,
   },
   selectedIcon: {
-    color: '#fff',
+    color: '#00e1ff',
     marginTop: 2,
   },
 });

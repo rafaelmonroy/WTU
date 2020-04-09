@@ -1,6 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, TextInput, View, Button} from 'react-native';
 import auth from '@react-native-firebase/auth';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faGlassMartiniAlt, faBeer} from '@fortawesome/free-solid-svg-icons';
 
 export default class SignUp extends React.Component {
   state = {email: '', password: '', errorMessage: null};
@@ -30,12 +32,13 @@ export default class SignUp extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Sign Up</Text>
+        <Text style={styles.text}>WTU</Text>
         {this.state.errorMessage && (
           <Text style={{color: 'red'}}>{this.state.errorMessage}</Text>
         )}
         <TextInput
           placeholder="Email"
+          placeholderTextColor="#00e1ff"
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={email => this.setState({email})}
@@ -44,15 +47,17 @@ export default class SignUp extends React.Component {
         <TextInput
           secureTextEntry
           placeholder="Password"
+          placeholderTextColor="#00e1ff"
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={password => this.setState({password})}
           value={this.state.password}
         />
-        <Button title="Sign Up" onPress={this.handleSignUp} />
+        <Button title="Sign Up" onPress={this.handleSignUp} color="#00e1ff" />
         <Button
+          color="#f00"
           title="Already have an account? Login"
-          onPress={() => this.props.navigation.navigate('Login')}
+          onPress={() => this.props.navigation.navigate('Welcome')}
         />
       </View>
     );
@@ -63,6 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#000',
   },
   textInput: {
     height: 40,
@@ -70,5 +76,20 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 8,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    color: '#fff',
+  },
+  text: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#fff',
+    fontSize: 25,
+    fontWeight: 'bold',
+    fontFamily: 'Verdana',
+  },
+  icon: {
+    color: '#00e1ff',
+    marginTop: 2,
   },
 });

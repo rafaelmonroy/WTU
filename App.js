@@ -32,8 +32,8 @@ function App() {
     return (
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen name="Welcome" component={Login} />
           <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="Login" component={Login} />
         </Stack.Navigator>
       </NavigationContainer>
     );
