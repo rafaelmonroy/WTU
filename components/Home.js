@@ -3,6 +3,8 @@ import {StyleSheet, View, Text, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
+import firestore from '@react-native-firebase/firestore';
+
 //fontAwesome
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
@@ -21,6 +23,27 @@ import List from './main/List';
 const Tab = createBottomTabNavigator();
 
 export default class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: 'test',
+    };
+  }
+
+  componentDidMount() {
+    let data;
+    const getInfo = async () => {
+      const user = await firestore();
+      const collections = await user.collection('Tests');
+      const docs = await collections.doc('testing');
+      const info = await docs.get();
+      data = info._data.rafael;
+      this.setState({name: data});
+      console.log(this.state.name);
+    };
+    getInfo();
+  }
+
   render() {
     return (
       <NavigationContainer independent={true}>
@@ -28,6 +51,7 @@ export default class Home extends Component {
           <MainStatusBar />
           <Header />
           <Tab.Navigator
+            screenProps={{signOut: 'this.signOut'}}
             screenOptions={({route}) => ({
               tabBarIcon: ({focused}) => {
                 if (route.name === 'Map') {
