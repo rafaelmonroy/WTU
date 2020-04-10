@@ -10,8 +10,8 @@ export default class Login extends React.Component {
     // TODO: Firebase stuff...
     auth()
       .signInWithEmailAndPassword(
-        'sarah.lane@gmail.com',
-        'SuperSecretPassword!',
+        `${this.state.email}`,
+        `${this.state.password}`,
       )
       .then(() => {
         console.log('User logged in');
@@ -23,7 +23,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>WTU</Text>
+        <Text style={styles.text}>Worknight Turn Up</Text>
         {this.state.errorMessage && (
           <Text style={{color: 'red'}}>{this.state.errorMessage}</Text>
         )}
