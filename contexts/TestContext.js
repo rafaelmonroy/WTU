@@ -1,8 +1,11 @@
-import React, {createContext, useState} from 'react';
+import React, {createContext, useState, useEffect} from 'react';
 
 export const TestContext = createContext();
 
 export const TestContextProvider = props => {
+  useEffect(() => {
+    console.log('useEffect firing')
+  })
   const [books, setBooks] = useState([
     { title: "name of the wind", id: 1 },
     { title: "the way of kings", id: 2 },
