@@ -1,16 +1,25 @@
-import React, {Component} from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { TestContext } from '../../contexts/TestContext';
 
-export default class List extends Component {
-  componentDidMount() {}
-
-  render() {
+const List = () => {
+    const {books} = useContext(TestContext)
     return (
       <View style={styles.main}>
-        <Text style={styles.text}>TEMP</Text>
+        <Text style={styles.text}>Test</Text>
+        <ScrollView>
+          {books.map(book => {
+            return (
+              <Text key={book.id}>
+                {book.title}
+              </Text>
+            )
+          })}
+        </ScrollView>
       </View>
     );
-  }
+  
 }
 
 const styles = StyleSheet.create({
@@ -23,3 +32,5 @@ const styles = StyleSheet.create({
     color: '#f00',
   },
 });
+
+export default List;

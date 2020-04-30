@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {StyleSheet, View, Text, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {TestContextProvider} from '../contexts/TestContext'
 
 import firestore from '@react-native-firebase/firestore';
 
@@ -20,78 +21,74 @@ import Map from './main/Map';
 import BottomBar from './main/BottomBar';
 import List from './main/List';
 
+
+
+
 const Tab = createBottomTabNavigator();
 
-export default class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: 'test',
-    };
-  }
+const Home = () => {
 
-  componentDidMount() {
-    let data;
+  useEffect(() => {
     const getInfo = async () => {
       const user = await firestore();
       const collections = await user.collection('Tests');
       const docs = await collections.doc('testing');
       const info = await docs.get();
-      data = info._data.rafael;
-      this.setState({name: data});
-      console.log(this.state.name);
-    };
+      console.log(info._data)
+    }
     getInfo();
-  }
+  }) 
 
-  render() {
-    return (
-      <NavigationContainer independent={true}>
-        <View style={styles.constainer}>
-          <MainStatusBar />
-          <Header />
-          <Tab.Navigator
-            screenProps={{signOut: 'this.signOut'}}
-            screenOptions={({route}) => ({
-              tabBarIcon: ({focused}) => {
-                if (route.name === 'Map') {
-                  return (
-                    <FontAwesomeIcon
-                      icon={faMapMarkerAlt}
-                      size={25}
-                      style={focused ? styles.selectedIcon : styles.icon}
-                    />
-                  );
-                } else if (route.name === 'List') {
-                  return (
-                    <FontAwesomeIcon
-                      icon={faListOl}
-                      size={25}
-                      style={focused ? styles.selectedIcon : styles.icon}
-                    />
-                  );
-                }
-              },
-            })}
-            tabBarOptions={{
-              activeTintColor: 'red',
-              inactiveTintColor: 'red',
-              activeBackgroundColor: 'black',
-              inactiveBackgroundColor: 'black',
-              showLabel: false,
-              style: {
-                borderTopWidth: 4,
-                borderTopColor: '#00e1ff',
-              },
-            }}>
-            <Tab.Screen name="Map" component={Map} />
-            <Tab.Screen name="List" component={List} />
-          </Tab.Navigator>
-          <BottomBar />
-        </View>
-      </NavigationContainer>
-    );
-  }
+  return (
+    <NavigationContainer independent={true}>
+      <View style={styles.constainer}>
+        <MainStatusBar />
+        <TestContextProvider>
+        <Header />
+        </TestContextProvider>
+        
+        <Tab.Navigator
+          screenProps={{signOut: 'this.signOut'}}
+          screenOptions={({route}) => ({
+            tabBarIcon: ({focused}) => {
+              if (route.name === 'Map') {
+                return (
+                  <FontAwesomeIcon
+                    icon={faMapMarkerAlt}
+                    size={25}
+                    style={focused ? styles.selectedIcon : styles.icon}
+                  />
+                );
+              } else if (route.name === 'List') {
+                return (
+                  <FontAwesomeIcon
+                    icon={faListOl}
+                    size={25}
+                    style={focused ? styles.selectedIcon : styles.icon}
+                  />
+                );
+              }
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: 'red',
+            inactiveTintColor: 'red',
+            activeBackgroundColor: 'black',
+            inactiveBackgroundColor: 'black',
+            showLabel: false,
+            style: {
+              borderTopWidth: 4,
+              borderTopColor: '#00e1ff',
+            },
+          }}>
+          <Tab.Screen name="Map" component={Map} />
+          <Tab.Screen name="List" component={List} />
+        </Tab.Navigator>
+        <BottomBar />
+      </View>
+    </NavigationContainer>
+  );
+  
 }
 
 const styles = StyleSheet.create({
@@ -108,3 +105,5 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
+
+export default Home;

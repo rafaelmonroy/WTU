@@ -7,6 +7,9 @@ import auth from '@react-native-firebase/auth';
 import SignUp from './components/auth/SignUp';
 import Login from './components/auth/Login';
 import Home from './components/Home';
+import { TestContextProvider } from './contexts/TestContext';
+
+
 // create our app's navigation stack
 const Stack = createStackNavigator();
 
@@ -39,7 +42,7 @@ function App() {
     );
   }
 
-  return <Home />;
+  return <TestContextProvider><Home /></TestContextProvider>;
 }
 
 export default App;

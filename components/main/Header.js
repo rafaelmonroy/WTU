@@ -1,34 +1,35 @@
-import React, {Component} from 'react';
+import React, {useContext, Component} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faGlassMartiniAlt, faBeer} from '@fortawesome/free-solid-svg-icons';
 import auth from '@react-native-firebase/auth';
 
-export default class Header extends Component {
+const Header = () => {
+
   signOut = () => {
     auth()
       .signOut()
       .then(() => console.log('User signed out!'));
   };
-  render() {
-    return (
-      <View style={styles.header}>
-        <View style={styles.empty} />
-        <Text style={styles.text}>
-          <FontAwesomeIcon icon={faBeer} size={25} style={styles.icon} /> WTU{' '}
-          <FontAwesomeIcon
-            icon={faGlassMartiniAlt}
-            size={21}
-            style={styles.icon}
-          />
-        </Text>
 
-        <TouchableOpacity onPress={this.signOut} style={styles.button}>
-          <Text>Sign Out</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+  return (
+    <View style={styles.header}>
+      <View style={styles.empty} />
+      <Text style={styles.text}>
+        <FontAwesomeIcon icon={faBeer} size={25} style={styles.icon} /> WTU{' '}
+        <FontAwesomeIcon
+          icon={faGlassMartiniAlt}
+          size={21}
+          style={styles.icon}
+        />
+      </Text>
+
+      <TouchableOpacity onPress={this.signOut} style={styles.button}>
+        <Text>Sign Out</Text>
+      </TouchableOpacity>
+    </View>
+  );
+  
 }
 
 const styles = StyleSheet.create({
@@ -70,3 +71,5 @@ const styles = StyleSheet.create({
     flex: 2.3,
   },
 });
+
+export default Header;
