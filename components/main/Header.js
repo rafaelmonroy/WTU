@@ -5,7 +5,6 @@ import {faGlassMartiniAlt, faBeer} from '@fortawesome/free-solid-svg-icons';
 import auth from '@react-native-firebase/auth';
 
 const Header = () => {
-
   signOut = () => {
     auth()
       .signOut()
@@ -29,8 +28,7 @@ const Header = () => {
       </TouchableOpacity>
     </View>
   );
-  
-}
+};
 
 const styles = StyleSheet.create({
   header: {

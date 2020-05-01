@@ -1,9 +1,9 @@
 import React, {createContext, useState, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
 
-export const TestContext = createContext();
+export const GlobalContext = createContext();
 
-export const TestContextProvider = props => {
+export const GlobalContextProvider = props => {
   const [data, setData] = useState('');
   useEffect(() => {
     const getInfo = async () => {
@@ -16,6 +16,8 @@ export const TestContextProvider = props => {
     getInfo();
   });
   return (
-    <TestContext.Provider value={{data}}>{props.children}</TestContext.Provider>
+    <GlobalContext.Provider value={{data}}>
+      {props.children}
+    </GlobalContext.Provider>
   );
 };

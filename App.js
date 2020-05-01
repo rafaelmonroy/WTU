@@ -7,8 +7,7 @@ import auth from '@react-native-firebase/auth';
 import SignUp from './components/auth/SignUp';
 import Login from './components/auth/Login';
 import Home from './components/Home';
-import { TestContextProvider } from './contexts/TestContext';
-
+import {GlobalContextProvider} from './contexts/GlobalContext';
 
 // create our app's navigation stack
 const Stack = createStackNavigator();
@@ -33,16 +32,22 @@ function App() {
 
   if (!user) {
     return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Welcome" component={Login} />
-          <Stack.Screen name="SignUp" component={SignUp} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <GlobalContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Welcome" component={Login} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </GlobalContextProvider>
     );
   }
 
-  return <TestContextProvider><Home /></TestContextProvider>;
+  return (
+    <GlobalContextProvider>
+      <Home />
+    </GlobalContextProvider>
+  );
 }
 
 export default App;
