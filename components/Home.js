@@ -1,17 +1,11 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {StyleSheet, View, Text, StatusBar} from 'react-native';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {TestContextProvider} from '../contexts/TestContext';
-import firestore from '@react-native-firebase/firestore';
 
 //fontAwesome
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faMapMarkerAlt,
-  faListOl,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
+import {faMapMarkerAlt, faListOl} from '@fortawesome/free-solid-svg-icons';
 
 //components
 import MainStatusBar from './main/MainStatusBar';

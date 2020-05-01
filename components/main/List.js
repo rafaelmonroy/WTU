@@ -1,9 +1,9 @@
 import React, {useContext, useEffect} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import {TestContext} from '../../contexts/TestContext';
+import {GlobalContext} from '../../contexts/GlobalContext';
 
 const List = () => {
-  const {data} = useContext(TestContext);
+  const {data} = useContext(GlobalContext);
 
   return (
     <View style={styles.main}>
