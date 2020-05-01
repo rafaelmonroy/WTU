@@ -61,6 +61,7 @@ buck-out/
 # files with google api 
 /ios/WTU/AppDelegate.m 
 /ios/GoogleService-Info.plist
+/config
 
 
 

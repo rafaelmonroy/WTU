@@ -7,7 +7,8 @@ const List = () => {
 
   return (
     <View style={styles.main}>
-      <Text style={styles.text}>{data}</Text>
+      <Text style={styles.text}>Name: {data.name}</Text>
+      <Text style={styles.text}>Address: {data.address}</Text>
     </View>
   );
 };
