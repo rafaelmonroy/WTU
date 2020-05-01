@@ -1,26 +1,16 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { TestContext } from '../../contexts/TestContext';
+import {TestContext} from '../../contexts/TestContext';
 
 const List = () => {
-    const {books} = useContext(TestContext)
-    return (
-      <View style={styles.main}>
-        <Text style={styles.text}>Test</Text>
-        <ScrollView>
-          {books.map(book => {
-            return (
-              <Text key={book.id}>
-                {book.title}
-              </Text>
-            )
-          })}
-        </ScrollView>
-      </View>
-    );
-  
-}
+  const {data} = useContext(TestContext);
+
+  return (
+    <View style={styles.main}>
+      <Text style={styles.text}>{data}</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   main: {

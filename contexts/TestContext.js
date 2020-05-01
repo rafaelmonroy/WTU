@@ -1,18 +1,21 @@
 import React, {createContext, useState, useEffect} from 'react';
+import firestore from '@react-native-firebase/firestore';
 
 export const TestContext = createContext();
 
 export const TestContextProvider = props => {
+  const [data, setData] = useState('');
   useEffect(() => {
-    console.log('useEffect firing')
-  })
-  const [books, setBooks] = useState([
-    { title: "name of the wind", id: 1 },
-    { title: "the way of kings", id: 2 },
-    { title: "the final empire", id: 3 },
-    { title: "the hero of ages", id: 4 },
-  ]);
+    const getInfo = async () => {
+      const user = await firestore();
+      const collections = await user.collection('Tests');
+      const docs = await collections.doc('testing');
+      const info = await docs.get();
+      setData(info._data.rafael);
+    };
+    getInfo();
+  });
   return (
-    <TestContext.Provider value={{books}}>{props.children}</TestContext.Provider>
+    <TestContext.Provider value={{data}}>{props.children}</TestContext.Provider>
   );
 };
