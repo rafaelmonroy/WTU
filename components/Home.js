@@ -2,8 +2,7 @@ import React, {useState, useContext, useEffect} from 'react';
 import {StyleSheet, View, Text, StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {TestContextProvider} from '../contexts/TestContext'
-
+import {TestContextProvider} from '../contexts/TestContext';
 import firestore from '@react-native-firebase/firestore';
 
 //fontAwesome
@@ -21,32 +20,14 @@ import Map from './main/Map';
 import BottomBar from './main/BottomBar';
 import List from './main/List';
 
-
-
-
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
-
-  useEffect(() => {
-    const getInfo = async () => {
-      const user = await firestore();
-      const collections = await user.collection('Tests');
-      const docs = await collections.doc('testing');
-      const info = await docs.get();
-      console.log(info._data)
-    }
-    getInfo();
-  }) 
-
   return (
     <NavigationContainer independent={true}>
       <View style={styles.constainer}>
         <MainStatusBar />
-        <TestContextProvider>
         <Header />
-        </TestContextProvider>
-        
         <Tab.Navigator
           screenProps={{signOut: 'this.signOut'}}
           screenOptions={({route}) => ({
@@ -88,8 +69,7 @@ const Home = () => {
       </View>
     </NavigationContainer>
   );
-  
-}
+};
 
 const styles = StyleSheet.create({
   constainer: {
