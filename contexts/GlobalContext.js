@@ -1,20 +1,37 @@
 import React, {createContext, useState, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
+import GOOGLE_API from '../config/keys';
 
 export const GlobalContext = createContext();
 
 export const GlobalContextProvider = props => {
-  const [data, setData] = useState('');
+  const gKey = GOOGLE_API.key;
+  const [data, setData] = useState([]);
+
   useEffect(() => {
-    const getInfo = async () => {
+    const getBars = async () => {
       const user = await firestore();
-      const collections = await user.collection('Tests');
-      const docs = await collections.doc('testing');
+      const collections = await user.collection('Bars');
+      const docs = await collections.doc('bar');
       const info = await docs.get();
-      setData(info._data.rafael);
+      //create new instance of data
+      const newData = info._data;
+      //fetch coords
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${
+          newData.address
+        }&key=${gKey}`,
+      );
+      const json = await response.json();
+      //destruct and rename properties
+      const {lat: latitude, lng: longitude} = json.results[0].geometry.location;
+      //add new properties to new instance of data created
+      newData.coords = {latitude, longitude};
+      setData(newData);
     };
-    getInfo();
-  });
+    getBars();
+  }, [data]);
+
   return (
     <GlobalContext.Provider value={{data}}>
       {props.children}
