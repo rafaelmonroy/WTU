@@ -12,7 +12,7 @@ export const GlobalContextProvider = props => {
     const getBars = async () => {
       const user = await firestore();
       const collections = await user.collection('Bars');
-      const docs = await collections.doc('bar');
+      const docs = await collections.doc('he6p1k8RZshW9ktEf9Ul');
       const info = await docs.get();
       //create new instance of data
       const newData = info._data;
@@ -30,6 +30,14 @@ export const GlobalContextProvider = props => {
       setData(newData);
     };
     getBars();
+
+    const getTestData = async () => {
+      const user = await firestore();
+      const collections = await user.collection('Bars');
+      const docs = await collections.get();
+      console.log(docs);
+    };
+    getTestData();
   }, [data]);
 
   return (
