@@ -7,8 +7,11 @@ const List = () => {
 
   return (
     <View style={styles.main}>
-      <Text style={styles.text}>Name {data.name}</Text>
-      <Text style={styles.text}>Address {data.address}</Text>
+      {data.map(bar => {
+        const id = bar._ref._documentPath._parts[1];
+        const {name} = bar._data;
+        return <Text key={id}>{name}</Text>;
+      })}
     </View>
   );
 };
