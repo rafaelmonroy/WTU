@@ -1,29 +1,50 @@
-import React, {useContext, useEffect} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import React, {useContext} from 'react';
+import {StyleSheet, View, Text, FlatList} from 'react-native';
 import {GlobalContext} from '../../contexts/GlobalContext';
 
 const List = () => {
   const {data} = useContext(GlobalContext);
 
   return (
-    <View style={styles.main}>
-      {data.map(bar => {
-        const id = bar._ref._documentPath._parts[1];
-        const {name} = bar._data;
-        return <Text key={id}>{name}</Text>;
-      })}
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        renderItem={({item}) => {
+          const {name, address, day} = item._data;
+          return (
+            <View>
+              <Text style={styles.itemTitle}>{name}</Text>
+              <Text style={styles.item}>{address}</Text>
+              <Text style={styles.item}>{day} Turn Up</Text>
+              <View style={styles.line} />
+            </View>
+          );
+        }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  main: {
+  container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingTop: 22,
   },
-  text: {
-    color: '#f00',
+  itemTitle: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+    color: 'red',
+    fontWeight: '900',
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+    height: 44,
+  },
+  line: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 2,
   },
 });
 

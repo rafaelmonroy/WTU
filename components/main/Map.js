@@ -14,36 +14,39 @@ const Map = () => {
         <ActivityIndicator size="large" color="#000" />
       </View>
     );
-  } else if (data.length === 2) {
-    return (
-      <MapView
-        style={styles.map}
-        //provider={PROVIDER_GOOGLE}
-        initialRegion={{
-          latitude: 34.04402,
-          longitude: -118.1854,
-          latitudeDelta: 0.2922,
-          longitudeDelta: 0.2421,
-        }}>
-        {data.map(bar => {
-          const id = bar._ref._documentPath._parts[1];
-          const {name, coords} = bar._data;
-          const coordinates = coords ? coords : {latitude: 0, longitude: 0};
-          return (
-            <Marker key={id} coordinate={coordinates} title={name}>
-              <View style={styles.border}>
-                <FontAwesomeIcon
-                  style={styles.icon}
-                  icon={faGlassCheers}
-                  size={25}
-                />
-              </View>
-            </Marker>
-          );
-        })}
-      </MapView>
-    );
   }
+  return (
+    <MapView
+      style={styles.map}
+      //provider={PROVIDER_GOOGLE}
+      initialRegion={{
+        latitude: 34.04402,
+        longitude: -118.1854,
+        latitudeDelta: 0.2922,
+        longitudeDelta: 0.2421,
+      }}>
+      {data.map(bar => {
+        const id = bar._ref._documentPath._parts[1];
+        const {name, coords, day} = bar._data;
+        const coordinates = coords ? coords : {latitude: 0, longitude: 0};
+        return (
+          <Marker
+            key={id}
+            coordinate={coordinates}
+            title={name}
+            description={`${day} Turn Up`}>
+            <View style={styles.border}>
+              <FontAwesomeIcon
+                style={styles.icon}
+                icon={faGlassCheers}
+                size={25}
+              />
+            </View>
+          </Marker>
+        );
+      })}
+    </MapView>
+  );
 };
 
 const styles = StyleSheet.create({
