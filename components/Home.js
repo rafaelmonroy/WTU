@@ -5,7 +5,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 //fontAwesome
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faMapMarkerAlt, faListOl} from '@fortawesome/free-solid-svg-icons';
+import {
+  faMapMarkerAlt,
+  faListOl,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
 
 //components
 import MainStatusBar from './main/MainStatusBar';
@@ -13,6 +17,7 @@ import Header from './main/Header';
 import Map from './main/Map';
 import BottomBar from './main/BottomBar';
 import List from './main/List';
+import Add from './main/Add';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,22 +31,33 @@ const Home = () => {
           screenProps={{signOut: 'this.signOut'}}
           screenOptions={({route}) => ({
             tabBarIcon: ({focused}) => {
-              if (route.name === 'Map') {
-                return (
-                  <FontAwesomeIcon
-                    icon={faMapMarkerAlt}
-                    size={25}
-                    style={focused ? styles.selectedIcon : styles.icon}
-                  />
-                );
-              } else if (route.name === 'List') {
-                return (
-                  <FontAwesomeIcon
-                    icon={faListOl}
-                    size={25}
-                    style={focused ? styles.selectedIcon : styles.icon}
-                  />
-                );
+              switch (route.name) {
+                case 'Map':
+                  return (
+                    <FontAwesomeIcon
+                      icon={faMapMarkerAlt}
+                      size={25}
+                      style={focused ? styles.selectedIcon : styles.icon}
+                    />
+                  );
+                  break;
+                case 'List':
+                  return (
+                    <FontAwesomeIcon
+                      icon={faListOl}
+                      size={25}
+                      style={focused ? styles.selectedIcon : styles.icon}
+                    />
+                  );
+                  break;
+                case 'Add':
+                  return (
+                    <FontAwesomeIcon
+                      icon={faPlus}
+                      size={25}
+                      style={focused ? styles.selectedIcon : styles.icon}
+                    />
+                  );
               }
             },
           })}
@@ -58,6 +74,7 @@ const Home = () => {
           }}>
           <Tab.Screen name="Map" component={Map} />
           <Tab.Screen name="List" component={List} />
+          <Tab.Screen name="Add" component={Add} />
         </Tab.Navigator>
         <BottomBar />
       </View>

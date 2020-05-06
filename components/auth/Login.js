@@ -1,8 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, TextInput, View, Button} from 'react-native';
 import auth from '@react-native-firebase/auth';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faGlassMartiniAlt, faBeer} from '@fortawesome/free-solid-svg-icons';
 
 export default class Login extends React.Component {
   state = {email: '', password: '', errorMessage: null};
