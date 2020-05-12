@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import GooglePlacesInput from './GooglePlacesInput';
 
 export default class Add extends React.Component {
   state = {name: '', address: '', successMessage: null, errorMessage: null};
@@ -41,6 +42,7 @@ export default class Add extends React.Component {
           onChangeText={name => this.setState({name})}
           value={this.state.name}
         />
+        <GooglePlacesInput />
         <TextInput
           style={styles.addressInput}
           placeholder="Address"

@@ -19,6 +19,9 @@ const Map = () => {
     <MapView
       style={styles.map}
       //provider={PROVIDER_GOOGLE}
+      showsUserLocation={true}
+      followsUserLocation={true}
+      showsMyLocationButton={true}
       initialRegion={{
         latitude: 34.04402,
         longitude: -118.1854,
