@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import GooglePlacesInput from './GooglePlacesInput';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import GOOGLE_API from '../../config/keys';
 
 export default class Add extends React.Component {
   state = {name: '', address: '', successMessage: null, errorMessage: null};
-
   handleSubmit = () => {
-    if (this.name !== '' && this.address !== '') {
+    if (this.state.name !== '' && this.state.address !== '') {
       firestore()
         .collection('PotentialBars')
         .add({
@@ -24,31 +24,50 @@ export default class Add extends React.Component {
           console.log('Bar added!');
         });
       this.setState({name: '', address: '', successMessage: true});
+      this.GooglePlacesRef.setAddressText('');
       setTimeout(() => this.setState({successMessage: false}), 3000);
-    } else if (!this.name || !this.address) {
+    } else if (!this.state.name || !this.state.address) {
       this.setState({errorMessage: true});
       setTimeout(() => this.setState({errorMessage: false}), 3000);
     }
   };
 
   render() {
+    const gKey = GOOGLE_API.key;
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Submit a bar for us to check out!</Text>
         <TextInput
           style={styles.nameInput}
           placeholder="Name"
-          placeholderTextColor="#00e1ff"
+          placeholderTextColor="#B0B0B0"
           onChangeText={name => this.setState({name})}
           value={this.state.name}
         />
-        <GooglePlacesInput />
-        <TextInput
-          style={styles.addressInput}
+        <GooglePlacesAutocomplete
+          ref={instance => {
+            this.GooglePlacesRef = instance;
+          }}
           placeholder="Address"
-          placeholderTextColor="#00e1ff"
-          onChangeText={address => this.setState({address})}
-          value={this.state.address}
+          minLength={2} // minimum length of text to search
+          autoFocus={false}
+          returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+          keyboardAppearance={'default'} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
+          listViewDisplayed="auto" // true/false/undefined
+          fetchDetails={true}
+          renderDescription={row => row.description} // custom description render
+          onPress={(data, details = null) => {
+            // 'details' is provided when fetchDetails = true
+            this.setState({address: data.description});
+          }}
+          getDefaultValue={() => this.state.address}
+          query={{
+            // available options: https://developers.google.com/places/web-service/autocomplete
+            key: gKey,
+            language: 'en', // language of the results
+            types: 'address', // default: 'geocode'
+          }}
+          styles={inputStyles}
         />
 
         <TouchableOpacity onPress={this.handleSubmit} style={styles.button}>
@@ -76,7 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
   },
   button: {
     borderRadius: 5,
@@ -93,35 +112,20 @@ const styles = StyleSheet.create({
   },
   nameInput: {
     height: 40,
-    width: '90%',
+    width: '100%',
     borderColor: 'gray',
-    color: '#fff',
+    color: '#000',
     borderWidth: 1,
     marginTop: 8,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-  },
-  addressInput: {
-    height: 40,
-    width: '90%',
-    borderColor: 'gray',
-    color: '#fff',
-    borderWidth: 1,
-    marginTop: 8,
-    borderRadius: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
   text: {
     justifyContent: 'center',
     alignItems: 'center',
-    color: '#fff',
+    color: '#000',
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: 'Verdana',
-  },
-  icon: {
-    color: '#00e1ff',
-    marginTop: 2,
   },
   successContainer: {
     marginTop: 40,
@@ -136,5 +140,29 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
     textAlign: 'center',
+  },
+});
+
+const inputStyles = StyleSheet.create({
+  textInputContainer: {
+    width: '100%',
+    height: 'auto',
+    backgroundColor: 'white',
+    borderColor: 'gray',
+    borderWidth: 1,
+    flexDirection: 'row',
+  },
+  description: {
+    fontWeight: 'bold',
+  },
+  listView: {
+    color: 'white',
+  },
+  container: {
+    backgroundColor: 'white',
+    maxHeight: '25%',
+  },
+  textInput: {
+    color: 'black',
   },
 });
