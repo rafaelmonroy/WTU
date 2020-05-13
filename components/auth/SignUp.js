@@ -5,28 +5,37 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faGlassMartiniAlt, faBeer} from '@fortawesome/free-solid-svg-icons';
 
 export default class SignUp extends React.Component {
-  state = {email: '', password: '', errorMessage: null};
+  state = {
+    email: '',
+    password: '',
+    errorMessage: null,
+  };
   handleSignUp = () => {
     // TODO: Firebase stuff...
-    auth()
-      .createUserWithEmailAndPassword(
-        `${this.state.email}`,
-        `${this.state.password}`,
-      )
-      .then(() => {
-        console.log('User account created & signed in!');
-      })
-      .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
-        }
-
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-        }
-
-        console.error(error);
-      });
+    if (this.state.email && this.state.password) {
+      auth()
+        .createUserWithEmailAndPassword(
+          `${this.state.email}`,
+          `${this.state.password}`,
+        )
+        .then(() => {
+          console.log('User account created & signed in!');
+        })
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            this.setState({
+              errorMessage: 'That email address is already in use!',
+            });
+            setTimeout(() => this.setState({errorMessage: null}), 3000);
+          } else if (error.code === 'auth/invalid-email') {
+            this.setState({errorMessage: 'That email address is invalid!'});
+            setTimeout(() => this.setState({errorMessage: null}), 3000);
+          }
+        });
+    } else if (!this.state.email || !this.state.password) {
+      this.setState({errorMessage: 'Both fields are required'});
+      setTimeout(() => this.setState({errorMessage: null}), 3000);
+    }
   };
 
   render() {
@@ -34,7 +43,7 @@ export default class SignUp extends React.Component {
       <View style={styles.container}>
         <Text style={styles.text}>Worknight Turn Up</Text>
         {this.state.errorMessage && (
-          <Text style={{color: 'red'}}>{this.state.errorMessage}</Text>
+          <Text style={styles.error}>{this.state.errorMessage}</Text>
         )}
         <TextInput
           placeholder="Email"
@@ -91,5 +100,9 @@ const styles = StyleSheet.create({
   icon: {
     color: '#00e1ff',
     marginTop: 2,
+  },
+  error: {
+    color: 'red',
+    textAlign: 'center',
   },
 });

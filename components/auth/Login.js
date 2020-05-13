@@ -3,27 +3,36 @@ import {StyleSheet, Text, TextInput, View, Button} from 'react-native';
 import auth from '@react-native-firebase/auth';
 
 export default class Login extends React.Component {
-  state = {email: '', password: '', errorMessage: null};
+  state = {email: '', password: '', errorMessage: null, invalidInfo: null};
   handleLogin = () => {
     // TODO: Firebase stuff...
-    auth()
-      .signInWithEmailAndPassword(
-        `${this.state.email}`,
-        `${this.state.password}`,
-      )
-      .then(() => {
-        console.log('User logged in');
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    if (this.state.email && this.state.password) {
+      auth()
+        .signInWithEmailAndPassword(
+          `${this.state.email}`,
+          `${this.state.password}`,
+        )
+        .then(() => {
+          console.log('User logged in');
+        })
+        .catch(error => {
+          this.setState({invalidInfo: true});
+          setTimeout(() => this.setState({invalidInfo: false}), 3000);
+        });
+    } else if (!this.state.email || !this.state.password) {
+      this.setState({errorMessage: true});
+      setTimeout(() => this.setState({errorMessage: false}), 3000);
+    }
   };
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Worknight Turn Up</Text>
         {this.state.errorMessage && (
-          <Text style={{color: 'red'}}>{this.state.errorMessage}</Text>
+          <Text style={styles.error}>Both fields are required</Text>
+        )}
+        {this.state.invalidInfo && (
+          <Text style={styles.error}>No user found</Text>
         )}
         <TextInput
           style={styles.textInput}
@@ -80,5 +89,10 @@ const styles = StyleSheet.create({
   icon: {
     color: '#00e1ff',
     marginTop: 2,
+  },
+
+  error: {
+    color: 'red',
+    textAlign: 'center',
   },
 });
