@@ -9,6 +9,7 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import GOOGLE_API from '../../config/keys';
+import auth from '@react-native-firebase/auth';
 
 export default class Add extends React.Component {
   state = {name: '', address: '', successMessage: null, errorMessage: null};
@@ -32,60 +33,76 @@ export default class Add extends React.Component {
     }
   };
 
+  signOut = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
+  };
+
   render() {
     const gKey = GOOGLE_API.key;
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Submit a bar for us to check out!</Text>
-        <TextInput
-          style={styles.nameInput}
-          placeholder="Name"
-          placeholderTextColor="#B0B0B0"
-          onChangeText={name => this.setState({name})}
-          value={this.state.name}
-        />
-        <GooglePlacesAutocomplete
-          ref={instance => {
-            this.GooglePlacesRef = instance;
-          }}
-          placeholder="Address"
-          minLength={2} // minimum length of text to search
-          autoFocus={false}
-          returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
-          keyboardAppearance={'default'} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
-          listViewDisplayed="auto" // true/false/undefined
-          fetchDetails={true}
-          renderDescription={row => row.description} // custom description render
-          onPress={(data, details = null) => {
-            // 'details' is provided when fetchDetails = true
-            this.setState({address: data.description});
-          }}
-          getDefaultValue={() => this.state.address}
-          query={{
-            // available options: https://developers.google.com/places/web-service/autocomplete
-            key: gKey,
-            language: 'en', // language of the results
-            types: 'address', // default: 'geocode'
-          }}
-          styles={inputStyles}
-        />
+        <View style={styles.add}>
+          <Text style={styles.text}>Submit a bar for us to check out!</Text>
+          <TextInput
+            style={styles.nameInput}
+            placeholder="Name"
+            placeholderTextColor="#B0B0B0"
+            onChangeText={name => this.setState({name})}
+            value={this.state.name}
+          />
+          <GooglePlacesAutocomplete
+            ref={instance => {
+              this.GooglePlacesRef = instance;
+            }}
+            placeholder="Address"
+            minLength={2} // minimum length of text to search
+            autoFocus={false}
+            returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+            keyboardAppearance={'default'} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
+            listViewDisplayed="auto" // true/false/undefined
+            fetchDetails={true}
+            renderDescription={row => row.description} // custom description render
+            onPress={(data, details = null) => {
+              // 'details' is provided when fetchDetails = true
+              this.setState({address: data.description});
+            }}
+            getDefaultValue={() => this.state.address}
+            query={{
+              // available options: https://developers.google.com/places/web-service/autocomplete
+              key: gKey,
+              language: 'en', // language of the results
+              types: 'address', // default: 'geocode'
+            }}
+            styles={inputStyles}
+          />
 
-        <TouchableOpacity onPress={this.handleSubmit} style={styles.button}>
-          <Text style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
-        {this.state.successMessage && (
-          <View style={styles.successContainer}>
-            <Text style={styles.success}>
-              Thank you! {'\n'} We will check this bar out and if it's good, we
-              will add to map.
-            </Text>
-          </View>
-        )}
-        {this.state.errorMessage && (
-          <View style={styles.errorContainer}>
-            <Text style={styles.error}>Both fields are required</Text>
-          </View>
-        )}
+          <TouchableOpacity
+            onPress={this.handleSubmit}
+            style={styles.blueButton}>
+            <Text style={styles.blueButtonText}>Submit</Text>
+          </TouchableOpacity>
+
+          {this.state.successMessage && (
+            <View style={styles.successContainer}>
+              <Text style={styles.success}>
+                Thank you! {'\n'} We will check this bar out and if it's good,
+                we will add to map.
+              </Text>
+            </View>
+          )}
+          {this.state.errorMessage && (
+            <View style={styles.errorContainer}>
+              <Text style={styles.error}>Both fields are required</Text>
+            </View>
+          )}
+        </View>
+        <View>
+          <TouchableOpacity onPress={this.signOut} style={styles.redButton}>
+            <Text style={styles.redButtonText}>Sign Out</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -94,24 +111,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  add: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-  button: {
+  blueButton: {
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#00e1ff',
     marginTop: 20,
   },
-  buttonText: {
+  blueButtonText: {
     paddingTop: 3,
     paddingBottom: 3,
     paddingLeft: 6,
     paddingRight: 6,
   },
-  nameInput: {
+  redButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f00',
+    marginTop: 20,
     height: 40,
+  },
+  redButtonText: {
+    paddingTop: 3,
+    paddingBottom: 3,
+    paddingLeft: 6,
+    paddingRight: 6,
+    color: 'white',
+  },
+  nameInput: {
+    height: '5.5%',
     width: '100%',
     borderColor: 'gray',
     color: '#000',

@@ -1,53 +1,103 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Platform, Image, Text, View} from 'react-native';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import auth from '@react-native-firebase/auth';
-// import the different screens
-import SignUp from './components/auth/SignUp';
-import Login from './components/auth/Login';
-import Home from './components/Home';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
+//fontAwesome
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {
+  faMapMarkerAlt,
+  faListOl,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
+
+//components
+import MainStatusBar from './components/main/MainStatusBar';
+import Header from './components/main/Header';
+import Map from './components/main/Map';
+import BottomBar from './components/main/BottomBar';
+import List from './components/main/List';
+import Auth from './components/auth/Auth';
 import {GlobalContextProvider} from './contexts/GlobalContext';
 
-// create our app's navigation stack
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-function App() {
-  // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  if (initializing) return null;
-
-  if (!user) {
-    return (
-      <GlobalContextProvider>
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="Welcome" component={Login} />
-            <Stack.Screen name="SignUp" component={SignUp} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </GlobalContextProvider>
-    );
-  }
-
+const App = () => {
   return (
     <GlobalContextProvider>
-      <Home />
+      <NavigationContainer>
+        <View style={styles.constainer}>
+          <MainStatusBar />
+          <Header />
+          <Tab.Navigator
+            screenProps={{signOut: 'this.signOut'}}
+            screenOptions={({route}) => ({
+              tabBarIcon: ({focused}) => {
+                switch (route.name) {
+                  case 'Map':
+                    return (
+                      <FontAwesomeIcon
+                        icon={faMapMarkerAlt}
+                        size={25}
+                        style={focused ? styles.selectedIcon : styles.icon}
+                      />
+                    );
+                    break;
+                  case 'List':
+                    return (
+                      <FontAwesomeIcon
+                        icon={faListOl}
+                        size={25}
+                        style={focused ? styles.selectedIcon : styles.icon}
+                      />
+                    );
+                    break;
+                  case 'Auth':
+                    return (
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        size={25}
+                        style={focused ? styles.selectedIcon : styles.icon}
+                      />
+                    );
+                }
+              },
+            })}
+            tabBarOptions={{
+              activeTintColor: 'red',
+              inactiveTintColor: 'red',
+              activeBackgroundColor: 'black',
+              inactiveBackgroundColor: 'black',
+              showLabel: false,
+              style: {
+                borderTopWidth: 4,
+                borderTopColor: '#00e1ff',
+              },
+            }}>
+            <Tab.Screen name="Map" component={Map} />
+            <Tab.Screen name="List" component={List} />
+            <Tab.Screen name="Auth" component={Auth} />
+          </Tab.Navigator>
+          <BottomBar />
+        </View>
+      </NavigationContainer>
     </GlobalContextProvider>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  constainer: {
+    position: 'relative',
+    height: '100%',
+  },
+  icon: {
+    color: '#fff',
+    marginTop: 2,
+  },
+  selectedIcon: {
+    color: '#00e1ff',
+    marginTop: 2,
+  },
+});
 
 export default App;

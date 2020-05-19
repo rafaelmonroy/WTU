@@ -66,7 +66,11 @@ export default class SignUp extends React.Component {
         <Button
           color="#f00"
           title="Already have an account? Login"
-          onPress={() => this.props.navigation.navigate('Welcome')}
+          onPress={() =>
+            this.props.navigation.navigate(
+              'You Must Be Logged In To Submit A Bar',
+            )
+          }
         />
       </View>
     );
